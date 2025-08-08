@@ -1,1 +1,206 @@
-// iniy
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rapid Carrot</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .aspect-video {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 ratio */
+    }
+    .aspect-video iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      border: 0;
+    }
+    .music iframe {
+        margin: 0 auto;
+    }
+  </style>  
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+  <div class="max-w-4xl mx-auto p-6" x-data="{ tab: 'home' }">
+    <!-- Header -->
+    <header class="mb-6 text-center">
+      <h1 class="text-4xl font-bold text-orange-400">Rapid Carrot</h1>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="flex justify-center space-x-4 mb-8">
+      <button 
+        class="px-4 py-2 rounded-md"
+        :class="tab === 'home' ? 'bg-orange-500 text-white' : 'bg-gray-700 hover:bg-gray-600'"
+        @click="tab = 'home'">Home</button>
+
+      <button 
+        class="px-4 py-2 rounded-md"
+        :class="tab === 'work' ? 'bg-orange-500 text-white' : 'bg-gray-700 hover:bg-gray-600'"
+        @click="tab = 'work'">Work</button>
+
+      <button 
+        class="px-4 py-2 rounded-md"
+        :class="tab === 'music' ? 'bg-orange-500 text-white' : 'bg-gray-700 hover:bg-gray-600'"
+        @click="tab = 'music'">Music</button>
+
+      <button 
+        class="px-4 py-2 rounded-md"
+        :class="tab === 'video' ? 'bg-orange-500 text-white' : 'bg-gray-700 hover:bg-gray-600'"
+        @click="tab = 'video'">Video</button>
+    </nav>
+
+    <!-- Tab Content -->
+    <div>
+      <div x-show="tab === 'home'" x-transition>
+        <h2 class="text-2xl mb-2">Welcome Home</h2>
+        <p>A freelance artist and software engineer.</p>
+      </div>
+
+      <div x-show="tab === 'work'" x-transition>
+        <h2 class="text-2xl mb-2">Work Zone</h2>
+        <p>Here’s your work content.</p>
+      </div>
+
+      <div x-show="tab === 'music'" x-data="musicGallery()" x-init="init()" x-transition>
+        <h2 class="text-2xl mb-4">Music Player</h2>
+      
+        <!-- Bandcamp Player -->
+        <div class="music w-full mb-4">
+          <iframe 
+            style="width: 700px; height: 120px; border: 0;"
+            :src="tracks[currentIndex]" 
+            seamless>
+          </iframe>
+        </div>
+      
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between">
+          <button 
+            @click="prev()" 
+            class="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600"
+            :disabled="currentIndex === 0"
+          >
+            ⬅ Back
+          </button>
+      
+          <button 
+            @click="next()" 
+            class="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600"
+            :disabled="currentIndex === tracks.length - 1"
+          >
+            Next ➡
+          </button>
+        </div>
+      </div>
+
+
+      <div x-show="tab === 'video'" x-data="videoGallery()" x-init="init()" x-transition>
+        <h2 class="text-2xl mb-4">Video Section</h2>
+      
+        <!-- Video Player -->
+        <div class="aspect-video mb-4">
+          <iframe 
+            class="w-full h-full"
+            :src="videos[currentIndex]" 
+            frameborder="0"
+            allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+          </iframe>
+        </div>
+      
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between">
+          <button 
+            @click="prev()" 
+            class="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600"
+            :disabled="currentIndex === 0"
+          >
+            ⬅ Back
+          </button>
+      
+          <button 
+            @click="next()" 
+            class="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600"
+            :disabled="currentIndex === videos.length - 1"
+          >
+            Next ➡
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function videoGallery() {
+      return {
+        videos: [
+          'https://www.youtube.com/embed/1_z6mrBBBuE',
+          'https://www.youtube.com/embed/PtIrXD3kmd8',
+          'https://www.youtube.com/embed/cgWGH3fWQow',
+          'https://www.youtube.com/embed/fbYB-OC6Kps',
+          'https://www.youtube.com/embed/-baFIPp7nl0',
+          'https://www.youtube.com/embed/SRfNAtrPE8k',
+        ],
+        currentIndex: 0,
+  
+        init() {
+          // Could preload or validate links here
+        },
+  
+        next() {
+          if (this.currentIndex < this.videos.length - 1) {
+            this.currentIndex++;
+          }
+        },
+  
+        prev() {
+          if (this.currentIndex > 0) {
+            this.currentIndex--;
+          }
+        }
+      }
+    }
+  </script>
+  <script>
+    function musicGallery() {
+      return {
+        tracks: [
+          'https://bandcamp.com/EmbeddedPlayer/album=571518201/size=large/bgcol=333333/linkcol=e32c14/artwork=small/transparent=true/',
+          'https://bandcamp.com/EmbeddedPlayer/album=303910026/size=large/bgcol=333333/linkcol=e32c14/artwork=small/transparent=true/',
+          'https://bandcamp.com/EmbeddedPlayer/album=1985322209/size=large/bgcol=333333/linkcol=e32c14/artwork=small/transparent=true/',
+          'https://bandcamp.com/EmbeddedPlayer/album=2977401608/size=large/bgcol=333333/linkcol=e32c14/artwork=small/transparent=true/',
+          // Add more Bandcamp embed URLs here
+        ],
+        currentIndex: 0,
+  
+        init() {
+          // Optional: preload or validate if needed
+        },
+  
+        next() {
+          if (this.currentIndex < this.tracks.length - 1) {
+            this.currentIndex++;
+          }
+        },
+  
+        prev() {
+          if (this.currentIndex > 0) {
+            this.currentIndex--;
+          }
+        }
+      }
+    }
+  </script>
+
+
+
+</body>
+</html>
